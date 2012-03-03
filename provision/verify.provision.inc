@@ -49,7 +49,6 @@ function drush_provision_cdn_provision_verify() {
      * the 'service' method with the service type you want
      * to call as its only argument.
      */
-drush_log('drush_provision_cdn_provision_verify', 'ok');
     d()->service('cdn')->verify('site');
   }
 }

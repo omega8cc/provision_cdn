@@ -59,12 +59,6 @@ class Provision_Service_cdn_basic extends Provision_Service_cdn {
    */
   function config_data($config = null, $class = null) {
     $data = parent::config_data($config, $class);
-    if (!is_null($this->application_name)) {
-      $data['http_pred_path'] = $this->server->http_pred_path;
-      $data['http_postd_path'] = $this->server->http_postd_path;
-      $data['http_platformd_path'] = $this->server->http_platformd_path;
-      $data['http_vhostd_path'] = $this->server->http_vhostd_path;
-    }
 
     $data['http_port'] = $this->server->http_port;
 
@@ -82,19 +76,5 @@ class Provision_Service_cdn_basic extends Provision_Service_cdn {
     }
 
     return $data;
-  }
-
-  /**
-   * Implementation of service verify.
-   */
-  function verify() {
-    drush_log('Provision_Service_cdn_basic::verify', 'ok');
-    parent::verify();
-    if ($this->context->type == 'site') {
-      // Create the configuration file directory.
-      provision_file()->create_dir($this->server->cdn_config_path, dt("Example configuration"), 0700);
-      // Sync the directory to the remote server if needed.
-      $this->sync($this->server->cdn_config_path);
-    }
   }
 }

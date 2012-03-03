@@ -4,4 +4,3 @@ package = Provision
 dependencies[] = drush
 
 core = 6.x
-
