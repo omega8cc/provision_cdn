@@ -1,0 +1,7 @@
+name = Provision CDN
+description = CDN support Aegir sites
+package = Provision
+dependencies[] = drush
+
+core = 6.x
+
