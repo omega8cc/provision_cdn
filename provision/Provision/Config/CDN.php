@@ -5,7 +5,7 @@
  *
  * Just a file containing the value passed to us.
  */
-class Provision_Config_CDN extends Provision_Config_Http_Site {
+class Provision_Config_CDN extends Provision_Config {
   /**
    * Template file to load. In the same directory as this class definition.
    */

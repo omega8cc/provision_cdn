@@ -20,10 +20,6 @@
  * the public API for this service that are necessary.
  */
 class Provision_Service_cdn_nginx extends Provision_Service_cdn {
- /**
-  * Some common options handled upstream by the base service classes.
-  */
-
   /**
    * Initialize this class, including option handling.
    */
@@ -34,15 +30,18 @@ class Provision_Service_cdn_nginx extends Provision_Service_cdn {
      * Register configuration classes for the create_config / delete_config methods.
      */
     $this->configs['site'][] = 'Provision_Config_CDN';
-
-    /**
-     * Non configurable values.
-     */
-    $this->server->cdn_config_path = $this->server->http_vhostd_path;
   }
 
+  /**
+   * Initialize the site.
+   */
   function init_site() {
     parent::init_site();
+
+    /**
+     *  Define the location where the cdn vhost confis should be stored.
+     */
+    $this->server->cdn_config_path = $this->context->platform->web_server->http_vhostd_path;
   }
 
   /**
@@ -51,14 +50,17 @@ class Provision_Service_cdn_nginx extends Provision_Service_cdn {
   function config_data($config = null, $class = null) {
     $data = parent::config_data($config, $class);
 
-    $data['http_port'] = $this->server->http_port;
+    // Define the server as the server that the platform is running on
+    $data['server'] = $this->context->platform->web_server;
+
+    $data['http_port'] = $this->context->platform->web_server->http_port;
 
     // We assign this generic catch all for standard http.
     // The SSL based services will override this with the
     // correct ip address.
-    if (sizeof($this->server->ip_addresses)) {
+    if (sizeof($this->context->platform->web_server->ip_addresses)) {
       // Use the first IP address for all standard virtual hosts.
-      $data['ip_address'] = $this->server->ip_addresses[0];
+      $data['ip_address'] = $this->context->platform->web_server->ip_addresses[0];
     }
     else {
       // If no external ip addresses are defined, we fall back on *:port
@@ -85,5 +87,6 @@ class Provision_Service_cdn_nginx extends Provision_Service_cdn {
       $this->sync($this->server->cdn_config_path);
     }
   }
+
 }
 

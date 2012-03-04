@@ -7,7 +7,7 @@
  * This class should define the 'public API' to be used by the rest
  * of the system, which should not expose implementation details.
  */
-class Provision_Service_cdn extends Provision_Service_http {
+class Provision_Service_cdn extends Provision_Service_http_public {
   public $service = 'cdn';
 
   /**
