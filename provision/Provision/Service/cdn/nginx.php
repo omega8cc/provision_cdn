@@ -66,6 +66,10 @@ class Provision_Service_cdn_nginx extends Provision_Service_cdn {
       $data['ip_address'] = '*';
     }
 
+    if ($config == 'site') {
+      $data['redirect_url'] = $this->context->uri;
+    }
+
     return $data;
   }
 
