@@ -19,22 +19,6 @@ class Provision_Config_CDN extends Provision_Config_Http_Site {
     return $this->server->cdn_config_path . '/' . $this->uri . '--CDN';
   }
 
-  /**
-   * Override the write method.
-   */
-  function write() {
-    parent::write();
-
-    drush_set_option('TEST', 'TEST', 'site');
-  }
-
-  /**
-   * Override the unlink method.
-   */
-  function unlink() {
-    parent::unlink();
-  }
-
   function process() {
     parent::process();
 
@@ -47,7 +31,6 @@ class Provision_Config_CDN extends Provision_Config_Http_Site {
     if (!$this->site_enabled) {
       $this->template = $this->disabled_template;
     }
-
   }
 
 }
