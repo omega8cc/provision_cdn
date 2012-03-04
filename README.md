@@ -36,13 +36,4 @@ the Drupal CDN module for full effect (http://drupal.org/project/cdn).
 Caveats
 -------
 
-Currently not quite functional!
-
-You can add CDN domains in the aegir frontend, and when you verify the site, these
-are added to the site's drush alias. After doing that, if you manually run the
-following command on your server, the nginx virtual host will be created:
-
-drush @example.com provision-verify --cdn_service_type=nginx
-
-So far, I have been unable to work out how to get that to run automatically when
-the site is verified. Help welcome!
+Currently not quite functional! Currently only works with Nginx.

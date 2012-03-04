@@ -46,5 +46,5 @@ function provision_cdn_provision_register_autoload() {
  */
 function provision_cdn_provision_services() {
   provision_cdn_provision_register_autoload();
-  return array('cdn' => NULL);
+  return array('cdn' => 'nginx');
 }
