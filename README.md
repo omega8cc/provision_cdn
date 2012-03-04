@@ -22,6 +22,8 @@ There are two parts to the code:
 
 Now just enable the module in the Aegir frontend, and you're ready to go.
 
+NOTE: This was built on a Barracuda system, so requires Provision 6.x-2.x
+
 
 Usage
 -----
