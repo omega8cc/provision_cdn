@@ -21,7 +21,6 @@
  * no implementation has been selected, nothing will happen.
  */
 function drush_provision_cdn_provision_verify() {
-  drush_log('drush_provision_cdn_provision_verify', 'warning');
   /**
    * Using the d() accessor.
    *
@@ -50,7 +49,6 @@ function drush_provision_cdn_provision_verify() {
      * the 'service' method with the service type you want
      * to call as its only argument.
      */
-    drush_log('verify...', 'warning');
     d()->service('cdn')->verify('site');
   }
 }
