@@ -19,6 +19,15 @@ class Provision_Config_CDN extends Provision_Config {
     return $this->server->cdn_config_path . '/' . $this->uri . '--CDN';
   }
 
+  function write() {
+    if (!isset($this->context->cdn) || empty($this->context->cdn)) {
+      return;
+    }
+ 
+    parent::write();
+    $this->data['server']->sync($this->filename());
+  }
+
   function process() {
     parent::process();
 
