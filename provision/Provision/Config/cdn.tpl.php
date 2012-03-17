@@ -3,8 +3,17 @@ $ip_address = !empty($ip_address) ? $ip_address : '*';
 ?>
 server {
   limit_conn   gulag 18; # like mod_evasive - this allows max 18 simultaneous connections from one IP address
-  listen       <?php print $ip_address . ':' . $http_port; ?>;
-  server_name <?php foreach ($this->cdn as $cdn_domain) : if (trim($cdn_domain)) : ?> <?php print $cdn_domain; ?><?php endif; endforeach; ?>;
+<?php
+if ($ip_address == '*') {
+  print "  listen       {$ip_address}:{$http_port};\n";
+}
+else {
+  foreach ($server->ip_addresses as $ip) {
+    print "  listen       {$ip}:{$http_port};\n";
+  }
+}
+?>
+  server_name  <?php foreach ($this->cdn as $cdn_domain) : if (trim($cdn_domain)) : ?> <?php print $cdn_domain; ?><?php endif; endforeach; ?>;
   root         <?php print "{$this->root}"; ?>;
 
   server_name_in_redirect off;
