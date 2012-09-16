@@ -26,10 +26,10 @@ function hosting_cdn_form_data(&$form) {
   if (user_access('create cdn domains')) {
     $form['cdn'] = array(
       '#type' => 'textarea',
-      '#title' => t('CDN domains'),
-      '#description' => t('The site\' assets can also be accessed through these domain names, one per line.'),
+      '#title' => t('Local CDN domains'),
+      '#description' => t('The site\'s assets can also be accessed through these domain names, one per line.'),
       '#default_value' => implode("\n", (array) $form['#node']->cdn),
-      '#weight' => 10,
+      '#weight' => 19,
     );
     return $form;
   }
@@ -161,9 +161,9 @@ function hosting_cdn_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
           }
           $node->content['info']['cdn'] = array(
             '#type' => 'item',
-            '#title' => t('CDN domains'),
-            '#value' => implode(', ', $links), 
-            '#weight' => 10,
+            '#title' => t('Local CDN domains'),
+            '#value' => implode(', ', $links),
+            '#weight' => 19,
           );
         }
         break;
