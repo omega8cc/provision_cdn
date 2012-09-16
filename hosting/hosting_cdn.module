@@ -185,10 +185,10 @@ function hosting_cdn_perm() {
  * this url has not been used before
  */
 function hosting_cdn_allow_domain($url, $params = array()) {
-  $query = "SELECT COUNT(n.nid) FROM {node} n 
-      LEFT JOIN {hosting_site} h ON h.nid=n.nid 
-      LEFT JOIN {hosting_cdn} a  ON n.vid = a.vid 
-    WHERE 
+  $query = "SELECT COUNT(n.nid) FROM {node} n
+      LEFT JOIN {hosting_site} h ON h.nid=n.nid
+      LEFT JOIN {hosting_cdn} a  ON n.vid = a.vid
+    WHERE
       type='site' AND cdn='%s' AND h.status <> %d";
   $args[] = $url;
   $args[] = HOSTING_SITE_DELETED;
