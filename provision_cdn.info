@@ -1,5 +1,5 @@
 name = Provision CDN
-description = CDN support Aegir sites
+description = Local CDN support for Aegir sites
 package = Provision
 dependencies[] = drush
 
