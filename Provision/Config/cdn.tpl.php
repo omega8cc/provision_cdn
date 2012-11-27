@@ -19,9 +19,38 @@ else {
   server_name_in_redirect off;
 
   location / {
-    return 404;
-    # or
-    # rewrite ^ http://<?php print $redirect_url; ?> permanent;
+    root   /var/www/nginx-default;
+    index  index.html index.htm;
+  }
+
+  ###
+  ### CDN Far Future expiration support.
+  ###
+  location ^~ /cdn/farfuture/ {
+    tcp_nodelay   off;
+    access_log    off;
+    log_not_found off;
+    etag          off;
+    gzip_http_version 1.0;
+    if_modified_since exact;
+    location ~* ^/cdn/farfuture/.+\.(?:css|js|jpe?g|gif|png|ico|bmp|svg|swf|pdf|docx?|xlsx?|pptx?|tiff?|txt|rtf|class|otf|ttf|woff|eot|less)$ {
+      expires max;
+      add_header Access-Control-Allow-Origin *;
+      add_header X-Header "Far Future Generator 2.0 CDN";
+      add_header Cache-Control "no-transform, public";
+      add_header Last-Modified "Wed, 20 Jan 1988 04:20:42 GMT";
+      rewrite ^/cdn/farfuture/[^/]+/[^/]+/sites/[^/]+/(.+)$ /sites/<?php print $redirect_url; ?>/$1 break;
+      try_files $uri @redirect;
+    }
+    location ~* ^/cdn/farfuture/ {
+      expires epoch;
+      add_header Access-Control-Allow-Origin *;
+      add_header X-Header "Far Future Generator 2.1 CDN";
+      add_header Cache-Control "private, must-revalidate, proxy-revalidate";
+      rewrite ^/cdn/farfuture/[^/]+/[^/]+/sites/[^/]+/(.+)$ /sites/<?php print $redirect_url; ?>/$1 break;
+      try_files $uri @redirect;
+    }
+    try_files $uri @redirect;
   }
 
   ###
@@ -29,17 +58,17 @@ else {
   ### without all standard drupal rewrites, php-fpm etc.
   ###
   location ~* ^.+\.(?:css|js|htc|xml|jpe?g|gif|png|ico|bmp|svg|swf|pdf|docx?|xlsx?|pptx?|tiff?|txt|rtf|cgi|bat|pl|dll|aspx?|class|otf|ttf|woff|eot|less)$ {
-    access_log  off;
-    tcp_nodelay off;
-    expires     30d;
-    add_header  Access-Control-Allow-Origin *;
-    # allow files/images/downloads to be accessed without /sites/fqdn/
-    rewrite     ^/files/(.*)$              /sites/$server_name/files/$1 last;
-    rewrite     ^/images/(.*)$             /sites/$server_name/files/images/$1 last;
-    rewrite     ^/downloads/(.*)$          /sites/$server_name/files/downloads/$1 last;
-    rewrite     ^/.+/sites/.+/files/(.*)$  /sites/$server_name/files/$1 last;
-    set $nocache_details "Skip";
-    try_files   $uri @drupal;
+    expires       30d;
+    tcp_nodelay   off;
+    access_log    off;
+    log_not_found off;
+    rewrite ^/files/(.*)$ /sites/<?php print $redirect_url; ?>/files/$1 last;
+    rewrite ^/images/(.*)$ /sites/<?php print $redirect_url; ?>/files/images/$1 last;
+    rewrite ^/downloads/(.*)$ /sites/<?php print $redirect_url; ?>/files/downloads/$1 last;
+    rewrite ^/.+/sites/.+/files/(.*)$ /sites/<?php print $redirect_url; ?>/files/$1 last;
+    add_header Access-Control-Allow-Origin *;
+    add_header X-Header "Static Generator 2.0 CDN";
+    try_files $uri @redirect;
   }
 
   ###
@@ -50,31 +79,31 @@ else {
     expires     30d;
     tcp_nodelay off;
     tcp_nopush  off;
-    add_header  Access-Control-Allow-Origin *;
-    # allow files/downloads to be accessed without /sites/fqdn/
-    rewrite     ^/files/(.*)$              /sites/$server_name/files/$1 last;
-    rewrite     ^/downloads/(.*)$          /sites/$server_name/files/downloads/$1 last;
-    rewrite     ^/.+/sites/.+/files/(.*)$  /sites/$server_name/files/$1 last;
-    set $nocache_details "Skip";
-    try_files   $uri @drupal;
+    rewrite ^/files/(.*)$ /sites/<?php print $redirect_url; ?>/files/$1 last;
+    rewrite ^/downloads/(.*)$ /sites/<?php print $redirect_url; ?>/files/downloads/$1 last;
+    rewrite ^/.+/sites/.+/files/(.*)$ /sites/<?php print $redirect_url; ?>/files/$1 last;
+    add_header Access-Control-Allow-Origin *;
+    add_header X-Header "Static Generator 2.1 CDN";
+    try_files $uri @redirect;
   }
 
   ###
   ### Advagg_css and Advagg_js support.
   ###
   location ~* files/advagg_(?:css|js)/ {
-    access_log off;
-    expires    max;
-    rewrite    ^/files/advagg_(.*)/(.*)$ /sites/$server_name/files/advagg_$1/$2 last;
-    add_header ETag "";
-    add_header Cache-Control "max-age=290304000, no-transform, public";
+    expires       max;
+    etag          off;
+    access_log    off;
+    log_not_found off;
+    rewrite ^/files/advagg_(.*)/(.*)$ /sites/<?php print $redirect_url; ?>/files/advagg_$1/$2 last;
+    add_header Cache-Control "no-transform, public";
     add_header Last-Modified "Wed, 20 Jan 1988 04:20:42 GMT";
-    add_header X-Header "AdvAgg Generator 1.0";
-    set $nocache_details "Skip";
-    try_files  $uri @drupal;
+    add_header Access-Control-Allow-Origin *;
+    add_header X-Header "AdvAgg Generator 2.0 CDN";
+    try_files $uri @redirect;
   }
 
-  location @drupal {
+  location @redirect {
     rewrite ^/(.*)$  http://<?php print $redirect_url; ?>/$1 permanent;
   }
 }
