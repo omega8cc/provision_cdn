@@ -42,7 +42,7 @@ else {
       add_header X-Header "Far Future Generator 2.0 CDN";
       add_header Cache-Control "no-transform, public";
       add_header Last-Modified "Wed, 20 Jan 1988 04:20:42 GMT";
-      rewrite ^/cdn/farfuture/[^/]+/[^/]+/sites/[^/]+/(.+)$ /sites/<?php print $redirect_url; ?>/$1 break;
+      rewrite ^/cdn/farfuture/[^/]+/[^/]+/(.+)$ /$1 break;
       try_files $uri @redirect;
     }
     location ~* ^/cdn/farfuture/ {
@@ -50,7 +50,7 @@ else {
       add_header Access-Control-Allow-Origin *;
       add_header X-Header "Far Future Generator 2.1 CDN";
       add_header Cache-Control "private, must-revalidate, proxy-revalidate";
-      rewrite ^/cdn/farfuture/[^/]+/[^/]+/sites/[^/]+/(.+)$ /sites/<?php print $redirect_url; ?>/$1 break;
+      rewrite ^/cdn/farfuture/[^/]+/[^/]+/(.+)$ /$1 break;
       try_files $uri @redirect;
     }
     try_files $uri @redirect;
