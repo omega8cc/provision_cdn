@@ -18,9 +18,12 @@ else {
 
   server_name_in_redirect off;
 
-  location / {
+  location ^~ /under_construction.jpg {
     root   /var/www/nginx-default;
-    index  index.html index.htm;
+    expires       30d;
+    tcp_nodelay   off;
+    access_log    off;
+    log_not_found off;
   }
 
   ###
@@ -103,7 +106,13 @@ else {
     try_files $uri @redirect;
   }
 
+  location / {
+    root   /var/www/nginx-default;
+    index  index.html index.htm;
+  }
+
   location @redirect {
     rewrite ^/(.*)$  http://<?php print $redirect_url; ?>/$1 permanent;
   }
+
 }
