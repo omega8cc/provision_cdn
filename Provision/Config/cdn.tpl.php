@@ -2,7 +2,7 @@
 $ip_address = !empty($ip_address) ? $ip_address : '*';
 ?>
 server {
-  limit_conn   gulag 88; # like mod_evasive - this allows max 88 simultaneous connections from one IP address
+  limit_conn   limreq 88; # like mod_evasive - this allows max 88 simultaneous connections from one IP address
 <?php
 if ($ip_address == '*') {
   print "  listen       {$ip_address}:{$http_port};\n";
